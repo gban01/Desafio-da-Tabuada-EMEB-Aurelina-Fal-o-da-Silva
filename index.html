@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio da Tabuada - EMEB Aurelina Falcão da Silva</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- CONTAINER DA TELA INICIAL -->
+    <div id="screen-home" class="screen active">
+        <header class="header-school">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="Logo EMEB Aurelina Falcão da Silva" class="school-logo" onerror="this.style.display='none'; document.getElementById('logo-placeholder').style.display='flex';">
+                
+            </div>
+            <h2>EMEB Aurelina Falcão da Silva</h2>
+        </header>
+
+        <main class="main-content">
+            <div class="title-box">
+                <h1 class="main-title">DESAFIO DA TABUADA</h1>
+                <p class="subtitle">Aprender, girar e acertar!</p>
+            </div>
+
+            <section class="selection-section">
+                <h3>ESCOLHA AS TABUADAS</h3>
+                <div class="tables-grid" id="tables-grid">
+                    <!-- Cards inseridos dinamicamente pelo JS -->
+                </div>
+
+                <div class="selection-actions">
+                    <button id="btn-select-all" class="btn btn-secondary">SELECIONAR TODAS</button>
+                    <button id="btn-clear-all" class="btn btn-secondary">LIMPAR SELEÇÃO</button>
+                </div>
+            </section>
+
+            <div class="start-action">
+                <p id="msg-warning" class="warning-text hidden">Selecione pelo menos uma tabuada para começar.</p>
+                <button id="btn-start" class="btn btn-primary btn-large">🚀 INICIAR PARTIDA</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- CONTAINER DA TELA DE JOGO -->
+    <div id="screen-game" class="screen hidden">
+        <header class="game-header">
+            <div class="header-left">
+                <div class="logo-container-small">
+                    <img src="assets/logo.png" alt="Logo" class="school-logo-small" onerror="this.style.display='none'">
+                    <span>EMEB Aurelina Falcão</span>
+                </div>
+                <h2 class="game-title">DESAFIO DA TABUADA</h2>
+            </div>
+            
+            <div class="header-right">
+                <button id="btn-audio-toggle" class="btn-icon" title="Alternar Som">🔊 Som</button>
+                <button id="btn-close-game" class="btn-close" title="Fechar Partida">✕ FECHAR PARTIDA</button>
+            </div>
+        </header>
+
+        <div class="game-dashboard">
+            <div class="dash-card">
+                <span class="dash-label">Tabuadas:</span>
+                <span id="info-tables" class="dash-value">-</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-label">Questões:</span>
+                <span id="info-questions" class="dash-value">0/0</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-label">Acertos:</span>
+                <span id="info-hits" class="dash-value highlight">0</span>
+            </div>
+        </div>
+
+        <main class="game-area">
+            <!-- ROLETA 3D HEXAGONAL/PRISMÁTICA -->
+            <div class="wheel-stage">
+                <div class="wheel-3d-wrapper">
+                    <div id="wheel-3d" class="wheel-3d">
+                        <!-- Faces 3D geradas dinamicamente via JS -->
+                    </div>
+                </div>
+                <div class="wheel-pointer">▼</div>
+                <div class="wheel-shadow"></div>
+            </div>
+
+            <div class="wheel-controls">
+                <button id="btn-spin" class="btn btn-spin">🎲 GIRAR A ROLETA</button>
+            </div>
+
+            <!-- ÁREA DA PERGUNTA -->
+            <div id="question-box" class="question-box hidden">
+                <div class="badge-tabuada" id="badge-tabuada">TABUADA SORTEADA</div>
+                <div class="question-display" id="question-text">5 × 5 = ?</div>
+                
+                <form id="form-answer" class="answer-form">
+                    <input type="number" id="input-answer" placeholder="DIGITE SUA RESPOSTA" autocomplete="off" required>
+                    <button type="submit" id="btn-submit-answer" class="btn btn-primary">RESPONDER</button>
+                </form>
+
+                <div id="feedback-message" class="feedback-message hidden"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- TELA DE FIM DE PARTIDA (VITÓRIA) -->
+    <div id="screen-victory" class="screen hidden">
+        <div class="victory-card">
+            <div class="victory-icon">🎉</div>
+            <h1>PARABÉNS!</h1>
+            <p class="subtitle">Você completou o Desafio da Tabuada!</p>
+
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <span class="stat-num" id="stat-completed">0</span>
+                    <span class="stat-lbl">Questões Concluídas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num" id="stat-errors">0</span>
+                    <span class="stat-lbl">Tentativas Incorretas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num" id="stat-accuracy">100%</span>
+                    <span class="stat-lbl">Precisão Geral</span>
+                </div>
+            </div>
+
+            <div class="victory-actions">
+                <button id="btn-restart" class="btn btn-primary btn-large">🔄 JOGAR NOVAMENTE</button>
+                <button id="btn-home" class="btn btn-secondary">🏠 VOLTAR AO INÍCIO</button>
+            </div>
+        </div>
+        <div id="confetti-container" class="confetti-container"></div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE SAÍDA -->
+    <div id="modal-confirm" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>Sair da Partida?</h3>
+            <p>Deseja realmente fechar esta partida? Seu progresso atual será perdido.</p>
+            <div class="modal-actions">
+                <button id="btn-modal-cancel" class="btn btn-secondary">CONTINUAR JOGANDO</button>
+                <button id="btn-modal-confirm" class="btn btn-danger">FECHAR PARTIDA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
