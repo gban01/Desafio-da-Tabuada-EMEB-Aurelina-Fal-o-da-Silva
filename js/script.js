@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedTable = availableTables[Math.floor(Math.random() * availableTables.length)];
 
     // Duração do giro
-    const spinDuration = Math.floor(Math.random() * 20000) + 20000;
+    const spinDuration = Math.floor(Math.random() * 10000) + 10000;
 
     audioManager.play('roleta', true);
 
